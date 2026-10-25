@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+coverage/
+
+artifacts/*
+!artifacts/.gitkeep
+
+.DS_Store
+*.log

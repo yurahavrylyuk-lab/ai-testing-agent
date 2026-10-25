@@ -1,0 +1,15 @@
+{
+  "name": "Example App",
+  "platform": "ios",
+  "mode": "black-box",
+  "app": {
+    "bundleId": "com.example.app"
+  },
+  "device": {
+    "name": "iPhone 16"
+  },
+  "capabilities": {
+    "uiAutomation": true,
+    "screenshots": true
+  }
+}
