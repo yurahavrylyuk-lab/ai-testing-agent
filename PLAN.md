@@ -169,7 +169,7 @@ Completed after human approval and a safety check.
 - Origin: `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`
 - `main` tracks `origin/main`, and that commit is on the remote
 
-The local Xcode setup task is superseded. The environment workflow is implemented and awaiting hosted execution. The smoke session has not started.
+The local Xcode setup task is superseded. The environment workflow has run successfully on GitHub. The smoke session has not started.
 
 ## Superseded task: Set up and verify the local iOS automation environment
 
@@ -181,9 +181,9 @@ Appium 3.8.0 is installed, XCUITest driver 12.20.0 is installed, and the Appium 
 
 ## Next task: Set up GitHub Actions macOS iOS execution environment
 
-IMPLEMENTED — PENDING HOSTED EXECUTION.
+VERIFIED ON HOSTED RUNNER.
 
-`.github/workflows/ios-smoke.yml` exists. It uses `workflow_dispatch` on the standard `macos-26` runner, Node 24, `npm ci`, Xcode and developer-directory checks, Simulator runtime and device checks, Appium 3.8.0, XCUITest driver 12.20.0, Appium on `127.0.0.1` with `/status` polling and cleanup, then `npm test` and `npm run typecheck`. Analyst approved it, including the accepted SIGPIPE fix. Local tests are 18 passing, typecheck passes, and the YAML and shell review passed. GitHub-hosted execution is pending. Do not treat that as a CI pass.
+`.github/workflows/ios-smoke.yml` ran once as GitHub Actions run `40233325132` on `macos-26`, commit `c73e9bdbc9e7260475bfcaa3256868fce7ac2540`, conclusion success. The log shows Node `v24.22.1`, npm `11.19.1`, Xcode `26.6` build `17F113`, developer directory `/Applications/Xcode_26.6.app/Contents/Developer`, iOS runtimes `26.2`, `26.4.1`, and `26.5`, iPhone Simulators including `iPhone 17`, `iPhone 17 Pro`, `iPhone 17 Pro Max`, `iPhone 17e`, `iPhone Air`, and `iPhone 16e`, Appium `3.8.0`, `xcuitest@12.20.0`, `/status` `ready: true`, 18 hosted tests passed, and hosted typecheck passed. The Appium log step was skipped because the run did not fail.
 
 Do not create a real Appium iOS session, build or install a target app, capture an iOS screenshot, or implement scenarios, Slack, or AI exploration in this task.
 

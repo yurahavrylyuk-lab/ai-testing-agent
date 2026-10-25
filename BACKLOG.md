@@ -43,10 +43,10 @@ Status: IN_PROGRESS
 - [x] XCUITest driver 12.20.0 dependency installed
 - [x] GitHub Actions macOS environment workflow implemented
 - [x] Workflow reviewed and approved for integration
-- [ ] GitHub-hosted workflow successfully executed
-- [ ] Xcode verified on the hosted runner
-- [ ] Simulator verified on the hosted runner
-- [ ] Appium verified on the hosted runner
+- [x] GitHub-hosted workflow successfully executed
+- [x] Xcode verified on the hosted runner
+- [x] Simulator verified on the hosted runner
+- [x] Appium verified on the hosted runner
 - [ ] Real Appium/XCUITest iOS session
 - [ ] First target app
 - [ ] UI interaction
@@ -56,7 +56,7 @@ Status: IN_PROGRESS
 
 Local Xcode and the local iOS Simulator are not an MVP blocker.
 
-Verified done: workflow foundation, TypeScript bootstrap, dynamic target configuration, the public GitHub repository, the Appium and XCUITest driver dependencies, and `.github/workflows/ios-smoke.yml` implemented and approved for integration. A local Appium startup smoke test passed. `npm test` is 18 passing. `npm run typecheck` is passing. Two target configs load through `--target <path>`. The hosted environment stays unverified until that workflow runs. No hosted Xcode, Simulator, or Appium check, real iOS session, app launch, screenshot, artifact upload, or PASS/FAIL smoke run is verified.
+Verified done: workflow foundation, TypeScript bootstrap, dynamic target configuration, the public GitHub repository, the Appium and XCUITest driver dependencies, and hosted run `40233325132` of `ios-smoke.yml` on `macos-26` at commit `c73e9bdbc9e7260475bfcaa3256868fce7ac2540`. That run checked out the commit, set up Node `v24.22.1` and npm `11.19.1`, `npm ci` added 337 packages, Xcode `26.6` (build `17F113`) at `/Applications/Xcode_26.6.app/Contents/Developer`, simctl listed iOS runtimes `26.2`, `26.4.1`, and `26.5`, and available iPhone Simulators `iPhone 17`, `iPhone 17 Pro`, `iPhone 17 Pro Max`, `iPhone 17e`, `iPhone Air`, and `iPhone 16e`. Appium `3.8.0` and `xcuitest@12.20.0` were installed. `/status` reported `ready: true`. Hosted `npm test` passed 18 tests and hosted `npm run typecheck` passed. No real Appium/XCUITest session, target app, UI interaction, screenshot, evidence upload, or PASS/FAIL smoke run is verified.
 
 Public repository `yurahavrylyuk-lab/ai-testing-agent` is public. Origin is `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`. Initial commit `3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0`, message `feat: bootstrap ai testing agent`, is on `origin/main`.
 

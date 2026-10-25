@@ -10,7 +10,7 @@ Eventual milestone gate, after the GitHub Actions workflow: `npm run test:ios --
 
 Milestone 1 stack: Node.js, TypeScript, Appium, Appium XCUITest Driver, Vitest, Zod, dotenv.
 
-Task 1 is approved. The local Xcode environment task is superseded. The GitHub Actions environment workflow is implemented and APPROVED_FOR_INTEGRATION. It has not run on GitHub. Milestone 2 and later stay out.
+Task 1 is approved. The local Xcode environment task is superseded. The GitHub Actions environment workflow ran successfully on GitHub and is complete. The next task is the hosted Appium iOS smoke session. It has not started. Milestone 2 and later stay out.
 
 ## Current Task
 
@@ -18,9 +18,9 @@ Set up GitHub Actions macOS iOS execution environment.
 
 ## Status
 
-APPROVED_FOR_INTEGRATION
+COMPLETE
 
-Task 1 remains accepted. The environment workflow is accepted for integration. Milestone 1 stays in progress. The hosted workflow has not run. Do not mark CI PASS.
+Hosted run `40233325132` succeeded. Milestone 1 stays in progress. No real Appium iOS session, app launch, screenshot, or smoke PASS/FAIL is done.
 
 ## Branch
 
@@ -204,11 +204,21 @@ none
 
 ACCEPTED
 
-The GitHub Actions environment workflow is accepted for integration. Milestone 1 is not complete. Hosted execution has not run. The smoke-session task has not started.
+The environment workflow is complete. Hosted run `40233325132` on `macos-26` succeeded for commit `c73e9bdbc9e7260475bfcaa3256868fce7ac2540`. Milestone 1 is not complete. The smoke-session task has not started.
 
 ## Integration Status
 
-Awaiting human approval to commit, push, and execute `ios-smoke.yml`. This reconciliation does not create a commit, push, or workflow run. HEAD stays `3228e542c196d01e1acda4799da945c720cba4d9`. The working tree stays dirty. Do not mark CI PASS.
+Hosted environment verification succeeded: https://github.com/yurahavrylyuk-lab/ai-testing-agent/actions/runs/40233325132
+
+- Node `v24.22.1`, npm `11.19.1`
+- Xcode `26.6` build `17F113`
+- Developer directory `/Applications/Xcode_26.6.app/Contents/Developer`
+- iOS runtimes `26.2`, `26.4.1`, `26.5`
+- iPhone Simulators include `iPhone 17`, `iPhone 17 Pro`, `iPhone 17 Pro Max`, `iPhone 17e`, `iPhone Air`, and `iPhone 16e`
+- Appium `3.8.0`, `xcuitest@12.20.0`, `/status` `ready: true`
+- Hosted tests: 18 passed. Hosted typecheck passed.
+
+No real iOS session was created. The next task is not implemented.
 
 - Initial commit: `3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0` `feat: bootstrap ai testing agent`
 - Documentation commit already on the remote: `3228e542c196d01e1acda4799da945c720cba4d9` `docs: record initial repository publication`
@@ -307,9 +317,9 @@ Set up GitHub Actions macOS iOS execution environment.
 
 ### Status
 
-APPROVED_FOR_INTEGRATION
+COMPLETE
 
-Implemented and reviewed. Analyst approved the workflow, including the SIGPIPE fix. CI status: NOT YET RUN. Not committed or pushed. Do not mark CI PASS.
+Hosted run `40233325132` finished with conclusion success. Checkout, Node setup, `npm ci`, version prints, Xcode, simctl, Appium `3.8.0`, `xcuitest@12.20.0`, `/status`, tests, and typecheck all passed in the log. The Appium log step was skipped because the job did not fail.
 
 ### Scope
 
@@ -406,8 +416,16 @@ Verification (local, no Xcode; a stand-in `xcrun` on `PATH` printed a matching l
 
 Workflow scope unchanged. CI status: NOT YET RUN. Status is APPROVED_FOR_INTEGRATION. Do not mark CI PASS.
 
-### Following task
+## Next Task
 
 Create first GitHub-hosted Appium iOS smoke session.
 
-Not started. That later task selects or builds a source-controlled iOS test app, boots the Simulator, starts Appium, creates an XCUITest session, installs and launches the app, interacts once, captures a screenshot, uploads the artifact, and returns PASS or FAIL.
+### Status
+
+PLANNED
+
+Not started. Do not implement it in this reconciliation.
+
+### Scope
+
+Select or build a source-controlled iOS test app, boot the Simulator, start Appium, create an XCUITest session, install and launch the app, interact once, capture a screenshot, upload the artifact, and return PASS or FAIL. Pick a Simulator that the hosted image actually has. The example targets name `iPhone 16` and `iPhone 16 Pro`, which this run did not list.

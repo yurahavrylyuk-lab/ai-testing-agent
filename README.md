@@ -4,7 +4,7 @@ An AI-assisted mobile QA agent, starting with iOS. It targets applications throu
 
 ## Current status
 
-Early development — Milestone 1. `.github/workflows/ios-smoke.yml` exists and is the primary iOS backend path. The hosted iOS environment has not been verified. No real Appium iOS app session has run. The iOS test runner does not work yet.
+Early development — Milestone 1. GitHub Actions remains the primary iOS backend. `.github/workflows/ios-smoke.yml` exists and has run successfully on a `macos-26` runner. The hosted environment check passed. No real Appium iOS app session has run. The iOS test runner does not launch an app yet.
 
 ## Architecture
 
@@ -52,7 +52,7 @@ Changing the app should normally be target configuration, not a core-source chan
 - The XCUITest driver 12.20.0 is installed.
 - A local Appium startup smoke test passed.
 
-`.github/workflows/ios-smoke.yml` exists. The hosted iOS environment has not been verified. No real Appium iOS app session has run. No app has been launched by the agent yet. No screenshot from an iOS test exists yet.
+`.github/workflows/ios-smoke.yml` has run on GitHub Actions (`macos-26`, run `40233325132`). That run verified Xcode 26.6, simctl, iOS Simulator runtimes 26.2, 26.4.1, and 26.5, iPhone Simulators, Appium 3.8.0, XCUITest driver 12.20.0, Appium `/status`, 18 tests, and typecheck. No real Appium iOS app session has run. No app has been launched by the agent yet. No screenshot from an iOS test exists yet.
 
 ## Development workflow
 
