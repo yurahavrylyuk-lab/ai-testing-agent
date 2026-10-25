@@ -37,8 +37,8 @@ Status: IN_PROGRESS
 - [x] Architect / Builder / Analyst workflow foundation
 - [x] TypeScript project bootstrap
 - [x] Dynamic target configuration
-- [ ] Initial approved commit
-- [ ] Public GitHub repository
+- [x] Initial approved commit
+- [x] Public GitHub repository
 - [ ] Xcode / Simulator environment
 - [ ] Appium installation
 - [ ] XCUITest driver installation
@@ -48,9 +48,9 @@ Status: IN_PROGRESS
 - [ ] Capture screenshot artifact
 - [ ] Clean PASS / FAIL result
 
-Verified done: workflow foundation, TypeScript project bootstrap, and dynamic target configuration. Analyst approved Task 1. `npm test` is 18 passing. `npm run typecheck` is passing. The CLI selects the app with `--target <path>` and loads both example targets. No commit, remote, Xcode, Simulator, or Appium work is verified.
+Verified done: workflow foundation, TypeScript project bootstrap, dynamic target configuration, the initial commit, and the public GitHub repository. Analyst approved Task 1. `npm test` is 18 passing. `npm run typecheck` is passing. The CLI selects the app with `--target <path>` and loads both example targets. Xcode, Simulator, and Appium work are not verified.
 
-Public GitHub repository `ai-testing-agent` stays a later Milestone 1 step. It waits for the initial approved commit. Do not create or push it before that approval. The publication steps are in `PLAN.md`.
+Public repository `yurahavrylyuk-lab/ai-testing-agent` is public. Origin is `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`. Initial commit `3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0`, message `feat: bootstrap ai testing agent`, is on `origin/main`.
 
 ### Goal
 Run the project locally from Cursor and control an iOS application through Appium/XCUITest. The runner is not tied to one app. Milestone 1 establishes dynamic target loading and does not build the scenario engine.

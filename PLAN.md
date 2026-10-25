@@ -147,21 +147,18 @@ Use a second target file, `targets/example-second.target.json`, for a different 
 - [x] Run tests and typecheck.
 - [x] Leave the changes uncommitted for the Analyst. A commit happens only after human approval. Do not push, merge, or add a remote.
 
-**Verified.** Analyst approved Task 1. The CLI uses `--target <path>`. Dynamic loading is verified with `targets/example.target.json` and `targets/example-second.target.json`. Node 24 built-in TypeScript type stripping runs the CLI with `node src/cli.ts`. Task 1 has no separate build step. `npm test`: 18 passing. `npm run typecheck`: passing. The initial commit and public push have not happened.
+**Verified.** Analyst approved Task 1. The CLI uses `--target <path>`. Dynamic loading is verified with `targets/example.target.json` and `targets/example-second.target.json`. Node 24 built-in TypeScript type stripping runs the CLI with `node src/cli.ts`. Task 1 has no separate build step. `npm test`: 18 passing. `npm run typecheck`: passing.
 
 ## Later Milestone 1 task: Publish public GitHub repo `ai-testing-agent`
 
-Task 1 is approved and still uncommitted. Publish only after a human-approved commit exists and the safety check is repeated. Do not run the command now. There is no commit and no remote.
+Completed after human approval and a safety check.
 
-Before publication, verify `git status`, `git remote -v`, and `gh auth status`. Confirm that no `.env`, Slack webhook, credentials, generated artifacts, machine secrets, or other sensitive files are included. `.gitignore` must be correct.
+- Initial commit: `3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0` `feat: bootstrap ai testing agent`
+- Repository: `yurahavrylyuk-lab/ai-testing-agent`, public
+- Origin: `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`
+- `main` tracks `origin/main`, and that commit is on the remote
 
-Expected later command, only after an approved commit exists:
-
-```bash
-gh repo create ai-testing-agent --public --source=. --remote=origin --push
-```
-
-This command must not run until that approval. If `ai-testing-agent` has a concrete naming conflict, record the conflict and choose another public name before creating the repo.
+The environment task below remains PLANNED and has not started.
 
 ## Next task: Set up and verify the local iOS automation environment
 

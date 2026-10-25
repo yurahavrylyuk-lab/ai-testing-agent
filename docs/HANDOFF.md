@@ -20,21 +20,19 @@ Task 1 — Bootstrap the TypeScript project and implement dynamic target configu
 
 APPROVED
 
-Task 1 is accepted. Changes remain uncommitted. Milestone 1 stays in progress. The next task below is PLANNED and has not started.
+Task 1 is accepted and published. Milestone 1 stays in progress. The next task below is PLANNED and has not started.
 
 ## Branch
 
-`main`
+`main` tracks `origin/main`.
 
-`git init` created this repository. There is no upstream and no remote.
+Origin: `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`
 
 ## Base Commit
 
-None. `git rev-parse HEAD` fails because the repository has no commits:
+`3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0`
 
-```text
-fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.
-```
+`feat: bootstrap ai testing agent`
 
 ## Builder Scope
 
@@ -188,7 +186,7 @@ Setup requirements recorded during Architect bootstrap. Nothing was installed or
 - Appium is missing. `command -v appium` found nothing.
 - The Appium XCUITest driver is missing because Appium is not installed.
 - These gaps belong to the planned environment task. They do not undo approved Task 1.
-- The git repository has no commits and no remote. The initial commit is waiting for human approval. Do not commit, push, add a remote, or run `gh repo create` before that approval.
+- The initial commit and public repository are done. Xcode, Simulator, Appium, and the XCUITest driver are not.
 
 ## Analyst Review
 
@@ -202,44 +200,20 @@ none
 
 ## Architect Decision
 
-Task 1 is accepted. Dynamic target configuration is verified. Milestone 1 is not complete. The initial commit is ready for human approval. Public GitHub publication waits until that commit exists and the safety check is repeated. The environment-setup task is planned and has not started.
+Task 1 is accepted and the approved repository is public. Milestone 1 is not complete. The environment-setup task is planned and has not started.
 
 ## Integration Status
 
-Approved for initial commit. Public GitHub publication remains the next integration step. No commit or push has happened. There is no remote.
+Published and verified.
 
-Do not run these commands until a human approves them.
+- Initial commit: `3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0` `feat: bootstrap ai testing agent`
+- Repository: `yurahavrylyuk-lab/ai-testing-agent`
+- Visibility: public
+- Remote: `origin` `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git` (fetch and push)
+- `main` tracks `origin/main`
+- Remote HEAD matches the initial commit
 
-```bash
-git add \
-  .env.example \
-  .gitignore \
-  AGENTS.md \
-  BACKLOG.md \
-  PLAN.md \
-  docs/HANDOFF.md \
-  docs/reviews/.gitkeep \
-  package-lock.json \
-  package.json \
-  src/cli.ts \
-  src/config.ts \
-  targets/example.target.json \
-  targets/example-second.target.json \
-  tests/cli.test.ts \
-  tests/config.test.ts \
-  tsconfig.json
-git commit -m "feat: bootstrap ai testing agent"
-```
-
-Leave unstaged: `node_modules/`, `.env`, any other `.env.*` file, and `artifacts/` except a future intentional `artifacts/.gitkeep`. That placeholder does not exist yet. `.env.example` is the only env file to add. It contains an empty `SLACK_WEBHOOK_URL=` and no secret.
-
-After that commit exists, repeat `git status`, `git remote -v`, and `gh auth status`, and confirm no secrets or generated artifacts are included. Only then:
-
-```bash
-gh repo create ai-testing-agent --public --source=. --remote=origin --push
-```
-
-`gh auth status` currently reports an active github.com login. Do not print tokens. This authentication does not authorize running the create command now.
+The environment-setup task is still PLANNED and has not started.
 
 ## Next Task
 
