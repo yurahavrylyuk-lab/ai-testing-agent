@@ -12,25 +12,25 @@ Build a straightforward local AI-assisted mobile testing agent, starting with iO
 - generate a clear final report;
 - send the report to the Slack app **Notifier** via webhook.
 
-The first priority is a usable local MVP, not a large testing platform.
+The first priority is a usable MVP: local development on the Mac, and iOS execution on free standard GitHub-hosted macOS runners. It is not a large testing platform.
 
 ---
 
 ## Core Principles
 
-1. **Local first** — run from the developer Mac using Cursor.
+1. **Local development, hosted iOS execution** — develop from the Mac in Cursor. Run iOS tests on a standard GitHub-hosted macOS runner. Xcode is not required on the developer Mac for the MVP.
 2. **iOS first** — Android comes only after the iOS workflow is usable.
 3. **Simple before autonomous** — deterministic scenarios must work before AI exploration.
 4. **Shared core** — white-box and black-box testing use the same runner and reporting pipeline.
 5. **Evidence over guesses** — every failure should include reproducible evidence where possible.
-6. **No unnecessary infrastructure** — no cloud orchestration, device farm, dashboard, queue system, or distributed workers in the MVP.
+6. **Free execution, no extra infrastructure** — MVP execution uses standard GitHub-hosted macOS runners on the public repository. No larger runners, paid device clouds, dashboard, queue, microservice, or device-farm abstraction. If the repo becomes private later, cost assumptions must be reevaluated.
 7. **Capability-aware testing** — unsupported black-box operations must be marked `NOT_SUPPORTED`, never silently faked.
 
 ---
 
 # Milestones
 
-## Milestone 1 — Project Foundation + Local iOS Test Runner
+## Milestone 1 — Project Foundation + GitHub-Hosted iOS Test Runner
 
 Status: IN_PROGRESS
 
@@ -39,21 +39,29 @@ Status: IN_PROGRESS
 - [x] Dynamic target configuration
 - [x] Initial approved commit
 - [x] Public GitHub repository
-- [ ] Xcode / Simulator environment
-- [ ] Appium installation
-- [ ] XCUITest driver installation
-- [ ] Local iOS Appium session
-- [ ] Launch selected target app
-- [ ] Perform basic UI interaction
-- [ ] Capture screenshot artifact
-- [ ] Clean PASS / FAIL result
+- [x] Appium 3.8.0 dependency installed
+- [x] XCUITest driver 12.20.0 dependency installed
+- [x] GitHub Actions macOS environment workflow implemented
+- [x] Workflow reviewed and approved for integration
+- [ ] GitHub-hosted workflow successfully executed
+- [ ] Xcode verified on the hosted runner
+- [ ] Simulator verified on the hosted runner
+- [ ] Appium verified on the hosted runner
+- [ ] Real Appium/XCUITest iOS session
+- [ ] First target app
+- [ ] UI interaction
+- [ ] Screenshot
+- [ ] iOS evidence artifact upload
+- [ ] Final PASS / FAIL smoke run
 
-Verified done: workflow foundation, TypeScript project bootstrap, dynamic target configuration, the initial commit, and the public GitHub repository. Analyst approved Task 1. `npm test` is 18 passing. `npm run typecheck` is passing. The CLI selects the app with `--target <path>` and loads both example targets. Xcode, Simulator, and Appium work are not verified.
+Local Xcode and the local iOS Simulator are not an MVP blocker.
+
+Verified done: workflow foundation, TypeScript bootstrap, dynamic target configuration, the public GitHub repository, the Appium and XCUITest driver dependencies, and `.github/workflows/ios-smoke.yml` implemented and approved for integration. A local Appium startup smoke test passed. `npm test` is 18 passing. `npm run typecheck` is passing. Two target configs load through `--target <path>`. The hosted environment stays unverified until that workflow runs. No hosted Xcode, Simulator, or Appium check, real iOS session, app launch, screenshot, artifact upload, or PASS/FAIL smoke run is verified.
 
 Public repository `yurahavrylyuk-lab/ai-testing-agent` is public. Origin is `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`. Initial commit `3fd2f52c7e5cd02725d5e3afa0c74d260e6a55e0`, message `feat: bootstrap ai testing agent`, is on `origin/main`.
 
 ### Goal
-Run the project locally from Cursor and control an iOS application through Appium/XCUITest. The runner is not tied to one app. Milestone 1 establishes dynamic target loading and does not build the scenario engine.
+Develop the project on the Mac in Cursor. Execute iOS tests through Appium/XCUITest on a standard GitHub-hosted macOS runner. The runner is not tied to one app. Milestone 1 establishes dynamic target loading and does not build the scenario engine.
 
 ### Dynamic targets
 The target is selected by configuration. Future usage:
@@ -333,14 +341,15 @@ Not required for first usable release:
 - automatic Jira/GitHub issue creation
 - historical analytics
 - test case management platform integrations
-- remote artifact storage
+- remote artifact storage beyond GitHub Actions artifacts
+- Optional local Xcode + iOS Simulator backend
 - team/user management
 
 ---
 
 # Definition of MVP
 
-The MVP is complete when the system can locally:
+The MVP is complete when development stays on the Mac and iOS execution runs on a standard GitHub-hosted macOS runner. The system can:
 
 1. start an iOS test run;
 2. launch a target app;
@@ -351,4 +360,4 @@ The MVP is complete when the system can locally:
 7. generate a structured report;
 8. send the summary to Slack Notifier;
 9. perform a bounded AI exploratory run;
-10. do all of the above without a cloud backend or separate dashboard.
+10. do all of the above without a custom cloud backend, device farm, or separate dashboard.

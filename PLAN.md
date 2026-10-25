@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a local iOS testing agent that runs deterministic white-box and black-box test scenarios, collects evidence, produces reports, sends results to Slack Notifier, and later adds bounded AI exploration.
+**Goal:** Development stays local. iOS execution may be hosted. The MVP must dynamically choose the target app, trigger iOS testing, execute on a GitHub-hosted macOS iOS Simulator, run deterministic scenarios, support white-box and black-box capability differences, capture evidence, generate a report, notify Slack Notifier, and run bounded AI exploration.
 
-**Architecture:** A small TypeScript/Node.js orchestrator controls iOS through Appium using the XCUITest driver. The app under test is selected by target configuration, so the same runner tests different apps without core source changes. Tests are represented as reusable scenarios executed by one shared runner; target capabilities determine whether steps are available for white-box or black-box apps. Evidence, result classification, reporting, and Slack delivery are shared across both modes.
+**Architecture:** Local development → GitHub Actions macOS execution → Appium/XCUITest → iOS Simulator. Local Xcode is not mandatory. The app under test is selected by target configuration. White-box and black-box testing share one core. GitHub Actions artifacts carry screenshots, logs, and reports to Slack Notifier. This is not a device farm, queue, or microservice.
 
 **Tech Stack:** Node.js, TypeScript, Appium, Appium XCUITest Driver, Vitest, Zod, dotenv, native `fetch`, iOS Simulator/Xcode tooling.
 
@@ -12,10 +12,11 @@
 
 ## Global Constraints
 
-- Run locally on the developer Mac and be usable from Cursor.
+- Local development on the developer Mac, usable from Cursor. iOS execution on a standard GitHub-hosted macOS runner. Xcode is not required on the developer Mac for the MVP.
 - iOS first.
 - Optimize for the fastest usable MVP.
-- Do not build cloud infrastructure, a dashboard, distributed workers, queues, or a device farm.
+- MVP execution must use free infrastructure. Primary execution is standard GitHub-hosted macOS runners on the public repository. Do not select larger runners, Sauce Labs, BrowserStack, AWS device farms, or other paid device clouds. If the repo becomes private later, cost assumptions must be reevaluated.
+- Do not build a dashboard, microservices, queues, or a device-farm abstraction.
 - Use one shared runner for white-box and black-box testing.
 - Deterministic scenarios come before AI-driven exploration.
 - Unsupported operations must produce `NOT_SUPPORTED`; they must never be simulated as successful.
@@ -24,6 +25,16 @@
 - Keep modules small and avoid speculative abstractions.
 - The runner is not tied to one app. Select the target with configuration. A new app normally needs only a new target config and, where appropriate, app-specific scenarios.
 - Milestone 1 establishes dynamic target loading. Do not build the scenario engine in Milestone 1.
+
+## Evidence
+
+GitHub Actions artifacts are the initial remote storage for screenshots, logs, `results.json`, and `report.md`. No S3, R2, or other storage service for the MVP.
+
+## Known risk
+
+15 npm advisories in the Appium/XCUITest tree, 14 critical and 1 high. This is not a blocker. Do not downgrade major versions to silence the audit. For the MVP, Appium binds only to `127.0.0.1` on ephemeral GitHub-hosted runners. Reassess before a stable release. Example targets may name Simulator devices that do not exist on `macos-26`; that does not affect the environment check, and the real session must pick an available Simulator. Hosted runner images can change.
+
+Preserved from the local dependency install: Appium 3.8.0 is installed, XCUITest driver 12.20.0 is installed, the Appium startup smoke test passed, 18 tests pass, and typecheck passes. No iOS Simulator session has run.
 
 ## Dynamic Targets
 
@@ -114,7 +125,7 @@ Keep this structure unless implementation reveals a concrete reason to change it
 
 ---
 
-# Milestone 1 — Project Foundation + Local iOS Test Runner
+# Milestone 1 — Project Foundation + GitHub-Hosted iOS Test Runner
 
 ## Task 1: Bootstrap the TypeScript project and implement dynamic target configuration
 
@@ -147,7 +158,7 @@ Use a second target file, `targets/example-second.target.json`, for a different 
 - [x] Run tests and typecheck.
 - [x] Leave the changes uncommitted for the Analyst. A commit happens only after human approval. Do not push, merge, or add a remote.
 
-**Verified.** Analyst approved Task 1. The CLI uses `--target <path>`. Dynamic loading is verified with `targets/example.target.json` and `targets/example-second.target.json`. Node 24 built-in TypeScript type stripping runs the CLI with `node src/cli.ts`. Task 1 has no separate build step. `npm test`: 18 passing. `npm run typecheck`: passing.
+**Verified.** Analyst approved Task 1. The CLI uses `--target <path>`. Dynamic loading is verified with `targets/example.target.json` and `targets/example-second.target.json`. Node 24 built-in TypeScript type stripping runs the CLI with `node src/cli.ts`. Task 1 has no separate build step. `npm test`: 18 passing. `npm run typecheck`: passing. Appium 3.8.0 is installed, XCUITest driver 12.20.0 is installed, and the local Appium startup smoke test passed.
 
 ## Later Milestone 1 task: Publish public GitHub repo `ai-testing-agent`
 
@@ -158,23 +169,33 @@ Completed after human approval and a safety check.
 - Origin: `https://github.com/yurahavrylyuk-lab/ai-testing-agent.git`
 - `main` tracks `origin/main`, and that commit is on the remote
 
-The environment task below remains PLANNED and has not started.
+The local Xcode setup task is superseded. The environment workflow is implemented and awaiting hosted execution. The smoke session has not started.
 
-## Next task: Set up and verify the local iOS automation environment
+## Superseded task: Set up and verify the local iOS automation environment
 
-Status: PLANNED. Not started. This is environment readiness only. Task 2 remains the application-control runner.
+SUPERSEDED — local Xcode is not required for MVP.
 
-- [ ] Verify or install full Xcode and activate the correct developer directory.
-- [ ] Verify `xcodebuild` and `xcrun simctl`.
-- [ ] Verify at least one iOS Simulator runtime and device.
-- [ ] Install Appium and the XCUITest driver.
-- [ ] Verify Appium can start, and record the Xcode, Simulator, Appium, and driver versions.
+Not the next task. It was blocked because Xcode was not installed, Simulator was unavailable, and disk space was insufficient. An optional local Xcode and iOS Simulator backend can come later.
 
-Xcode.app is not installed. `xcode-select -p` is `/Library/Developer/CommandLineTools`. Appium is not installed.
+Appium 3.8.0 is installed, XCUITest driver 12.20.0 is installed, and the Appium startup smoke test passed. Keep those dependency lines.
 
-Out of scope: app launch, tap, screenshot, `npm run test:ios`, Slack, the scenario engine, commit, push, and `gh repo create`.
+## Next task: Set up GitHub Actions macOS iOS execution environment
+
+IMPLEMENTED — PENDING HOSTED EXECUTION.
+
+`.github/workflows/ios-smoke.yml` exists. It uses `workflow_dispatch` on the standard `macos-26` runner, Node 24, `npm ci`, Xcode and developer-directory checks, Simulator runtime and device checks, Appium 3.8.0, XCUITest driver 12.20.0, Appium on `127.0.0.1` with `/status` polling and cleanup, then `npm test` and `npm run typecheck`. Analyst approved it, including the accepted SIGPIPE fix. Local tests are 18 passing, typecheck passes, and the YAML and shell review passed. GitHub-hosted execution is pending. Do not treat that as a CI pass.
+
+Do not create a real Appium iOS session, build or install a target app, capture an iOS screenshot, or implement scenarios, Slack, or AI exploration in this task.
+
+## Following task: Create first GitHub-hosted Appium iOS smoke session
+
+Not started. Identified only. Do not implement it now.
+
+Select or build a source-controlled iOS test app, boot the Simulator, start Appium, create an XCUITest session, install and launch the app, interact once, capture a screenshot, upload the artifact, and return PASS or FAIL.
 
 ## Task 2: Create and close an Appium iOS session
+
+This is the following smoke-session task above. Not started. Do not implement it until the environment workflow is done.
 
 **Files:**
 - Create: `src/device/appium-session.ts`
@@ -191,12 +212,12 @@ Out of scope: app launch, tap, screenshot, `npm run test:ios`, Slack, the scenar
 - [ ] Implement minimal Appium/XCUITest session creation.
 - [ ] Implement the required action wrappers only.
 - [ ] Add `npm run appium` and `npm run test:ios` scripts.
-- [ ] Manually run a smoke interaction against an iOS Simulator.
+- [ ] Run the smoke interaction on the GitHub-hosted macOS runner, not on a required local Xcode install.
 - [ ] Save one screenshot under `artifacts/`.
 - [ ] Run unit tests and typecheck.
 - [ ] Commit: `feat: add local ios appium runner`
 
-**Milestone 1 gate:** `npm run test:ios -- --target <path>` launches the app selected by that target file, performs one UI action, takes a screenshot, and closes cleanly.
+**Milestone 1 gate:** `npm run test:ios -- --target <path>` launches the app selected by that target file on the GitHub Actions macOS runner, performs one UI action, takes a screenshot, and closes cleanly. The workflow task comes before this session task.
 
 ---
 
@@ -476,7 +497,7 @@ Do not implement a generic plugin SDK at this stage.
 - [ ] Slack Notifier receives final summary.
 - [ ] Bounded AI exploration works.
 - [ ] One connected-iPhone smoke test completed.
-- [ ] No cloud backend is required.
+- [ ] No custom cloud backend, device farm, or paid device cloud is required. Execution uses a standard GitHub-hosted macOS runner.
 
 ---
 
@@ -497,4 +518,4 @@ For each task:
 7. commit only after human approval;
 8. move to the next task.
 
-The first meaningful product checkpoint is the end of **Milestone 3**. At that point the project should already be useful: it can run iOS tests locally, capture evidence, generate a report, and notify Slack.
+The first meaningful product checkpoint is the end of **Milestone 3**. At that point the project should already be useful: it can run iOS tests on a GitHub-hosted macOS runner, capture evidence, generate a report, and notify Slack. Development stays local.

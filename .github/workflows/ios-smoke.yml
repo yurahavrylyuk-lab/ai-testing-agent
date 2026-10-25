@@ -1,0 +1,107 @@
+name: iOS environment smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ios-environment:
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Node and npm versions
+        run: |
+          node --version
+          npm --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Xcode
+        run: |
+          xcode-select -p
+          xcodebuild -version
+
+      - name: iOS Simulator runtimes and devices
+        run: |
+          if ! xcrun simctl list runtimes available > "$RUNNER_TEMP/ios-runtimes.txt"; then
+            echo "::error::Failed to list iOS Simulator runtimes"
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/ios-runtimes.txt"
+          if ! grep -q '^iOS ' "$RUNNER_TEMP/ios-runtimes.txt"; then
+            echo "::error::No available iOS Simulator runtime"
+            exit 1
+          fi
+
+          if ! xcrun simctl list devices available > "$RUNNER_TEMP/ios-devices.txt"; then
+            echo "::error::Failed to list Simulator devices"
+            exit 1
+          fi
+          cat "$RUNNER_TEMP/ios-devices.txt"
+          if ! grep -q 'iPhone' "$RUNNER_TEMP/ios-devices.txt"; then
+            echo "::error::No available iPhone Simulator device"
+            exit 1
+          fi
+
+      - name: Appium and XCUITest driver
+        run: |
+          npx appium --version
+          npx appium driver list --installed 2>&1 | tee "$RUNNER_TEMP/drivers.txt"
+          if ! grep -q 'xcuitest@' "$RUNNER_TEMP/drivers.txt"; then
+            echo "::error::XCUITest driver is not installed"
+            exit 1
+          fi
+
+      - name: Appium startup and /status
+        run: |
+          npx appium --address 127.0.0.1 --port 4723 > "$RUNNER_TEMP/appium.log" 2>&1 &
+          APPIUM_PID=$!
+          trap 'kill -INT "$APPIUM_PID" 2>/dev/null || true; wait "$APPIUM_PID" 2>/dev/null || true' EXIT
+
+          for _ in $(seq 1 60); do
+            if curl -fs http://127.0.0.1:4723/status -o "$RUNNER_TEMP/status.json"; then
+              break
+            fi
+            if ! kill -0 "$APPIUM_PID" 2>/dev/null; then
+              echo "::error::Appium exited before it became ready"
+              exit 1
+            fi
+            sleep 1
+          done
+          if [ ! -s "$RUNNER_TEMP/status.json" ]; then
+            echo "::error::Appium did not answer /status within 60 seconds"
+            exit 1
+          fi
+
+          cat "$RUNNER_TEMP/status.json"
+          echo
+          node -e '
+            const status = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"));
+            if (status.value?.ready !== true) {
+              console.error("::error::Appium /status did not report ready");
+              process.exit(1);
+            }
+            console.log("Appium ready:", status.value.build?.version);
+          ' "$RUNNER_TEMP/status.json"
+
+      - name: Appium log
+        if: failure()
+        run: cat "$RUNNER_TEMP/appium.log" || true
+
+      - name: Tests
+        run: npm test
+
+      - name: Typecheck
+        run: npm run typecheck

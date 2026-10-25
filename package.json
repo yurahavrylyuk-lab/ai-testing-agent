@@ -18,6 +18,8 @@
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
+    "appium": "^3.8.0",
+    "appium-xcuitest-driver": "^12.20.0",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5"
   }
